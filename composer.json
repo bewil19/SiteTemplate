@@ -1,0 +1,12 @@
+{
+    "name": "bewil19/sitetemplate",
+    "require": {
+        "php": "^8.0",
+        "league/plates": "^3.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "bewil19\\Site\\": "src"
+        }
+    }
+}
