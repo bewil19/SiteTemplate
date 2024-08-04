@@ -1,0 +1,57 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+
+# Redirect to domain without www.
+    RewriteCond %{HTTPS} off
+    RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+    RewriteRule .* http://%1%{REQUEST_URI} [R=301,L]
+# Same for HTTPS:
+    RewriteCond %{HTTPS} on
+    RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+    RewriteRule .* https://%1%{REQUEST_URI} [R=301,L]
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^([^\.]+)/([^\.]+)$ /index.php?page=$1&page2=$2 [L]
+    RewriteRule ^([^\.]+)$ index.php?page=$1 [NC,L]
+
+</IfModule>
+
+# enable gzip
+<IfModule mod_deflate.c>
+    SetOutputFilter DEFLATE
+
+    BrowserMatch ^Mozilla/4\.0[678] no-gzip
+    BrowserMatch ^Mozilla/4 gzip-only-text/html
+    BrowserMatch \bMSIE\s(7|8) !no-gzip !gzip-only-text/html
+
+    SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png|ico)$ no-gzip dont-vary
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE text/js
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/atom_xml
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE application/x-httpd-php
+    AddOutputFilterByType DEFLATE application/x-font-ttf
+    AddOutputFilterByType DEFLATE application/x-font-woff
+    AddOutputFilterByType DEFLATE application/x-font-opentype
+</IfModule>
+
+# Prevent viewing of htaccess file.
+<Files .htaccess>
+    Require all denied
+</Files>
+
+# Prevent viewing of config file.
+<Files config.json>
+    Require all denied
+</Files>
+
+# Prevent directory listings
+Options -Indexes
+

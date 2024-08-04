@@ -8,5 +8,12 @@
         "psr-4": {
             "bewil19\\Site\\": "src"
         }
+    },
+    "require-dev": {
+        "rector/rector": "^1.2",
+        "friendsofphp/php-cs-fixer": "*"
+    },
+    "scripts": {
+        "cs": ["./vendor/bin/php-cs-fixer fix"]
     }
 }
