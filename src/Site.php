@@ -90,8 +90,6 @@ class Site
 
         if (!file_exists($this->pageDir . $this->name . '.php')) {
             $template->setDirectory(__DIR__ . DIRECTORY_SEPARATOR . 'pages' . DIRECTORY_SEPARATOR);
-        } else {
-            $template->setDirectory(__DIR__ . DIRECTORY_SEPARATOR . 'pages' . DIRECTORY_SEPARATOR);
         }
 
         $siteName = $config->getSetting('siteName');
