@@ -100,7 +100,7 @@ class Site
         $template->addData([
             'siteName' => $siteName,
             'canonicalLink' => $this->siteUrl . $this->subDir . $this->name,
-            'siteUrl' => $this->siteUrl
+            'siteUrl' => $this->siteUrl . $this->subDir
         ]);
 
         try {
