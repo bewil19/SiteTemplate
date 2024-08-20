@@ -86,7 +86,7 @@ class Site
         }
 
         $template = new Engine($this->pageDir);
-        $template->loadExtension(new Asset($this->templateDir.'assets'));
+        $template->loadExtension(new Asset($this->rootDir));
 
         if (!file_exists($this->pageDir.$this->name.'.php')) {
             $template->setDirectory(__DIR__.DIRECTORY_SEPARATOR.'pages'.DIRECTORY_SEPARATOR);
