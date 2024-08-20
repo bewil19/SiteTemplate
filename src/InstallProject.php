@@ -10,12 +10,25 @@ class InstallProject{
         
         if(str_replace($projectFolder, "", $sourceFolder) === "vendor" . DIRECTORY_SEPARATOR . "bewil19" . DIRECTORY_SEPARATOR . "sitetemplate"){
             // do new project code
-            var_dump($sourceFolder);
             var_dump($projectFolder);
 
-            var_dump(self::getDirContents($sourceFolder . DIRECTORY_SEPARATOR . "example"));
+            $files = self::getDirContents($sourceFolder . DIRECTORY_SEPARATOR . "example");
+
+            foreach($files as $file){
+                $fileName = str_replace($sourceFolder . DIRECTORY_SEPARATOR . "example" . DIRECTORY_SEPARATOR, "", $file);
+                if(file_exists($projectFolder . $fileName) === false){
+                    $fileContents = file_get_contents($file);
+                    self::fileForceContents($projectFolder . $fileName, $fileContents);
+
+                    unset($fileContents);
+                }
+
+                unset($fileName, $file);
+            }
+
+            echo "Project Created!";
         } else {
-            echo "No";
+            echo "Project can not be created from here!";
         }
     }
 
