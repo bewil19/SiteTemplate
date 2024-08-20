@@ -13,13 +13,13 @@ class InstallProject{
             var_dump($sourceFolder);
             var_dump($projectFolder);
 
-            var_dump($sourceFolder . DIRECTORY_SEPARATOR . "example");
+            var_dump(self::getDirContents($sourceFolder . DIRECTORY_SEPARATOR . "example"));
         } else {
             echo "No";
         }
     }
 
-    function getDirContents($dir, &$results = array()) {
+    public static function getDirContents($dir, &$results = array()) {
         $files = scandir($dir);
     
         foreach ($files as $key => $value) {
@@ -27,7 +27,7 @@ class InstallProject{
             if (!is_dir($path)) {
                 $results[] = $path;
             } else if ($value != "." && $value != "..") {
-                $this->getDirContents($path, $results);
+                self::getDirContents($path, $results);
                 $results[] = $path;
             }
         }
