@@ -19,6 +19,8 @@ class Config
         DatabaseType::dbName => 'databaseName',
     ];
 
+    private string $installPassword = '$2y$10$OJ/67WlrXQS/GAZjhQgXm.CKxeBf6y5kJUI1LwwIYwrzNoF6559Te';
+
     private function __construct(private string $rootDir)
     {
         if ($this->checkConfig()) {
@@ -54,6 +56,9 @@ class Config
      */
     public function install(array $post): string
     {
+        if(password_verify($post['installPassword'], $this->installPassword) === false){
+            return 'Error: Invalid install password!';
+        }
         if (isset($post[DatabaseType::autoConnect]) && 'on' === $post[DatabaseType::autoConnect]) {
             $post[DatabaseType::autoConnect] = 'true';
         } else {
