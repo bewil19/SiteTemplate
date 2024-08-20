@@ -10,16 +10,12 @@ class InstallProject
         $projectFolder = str_replace('vendor'.DIRECTORY_SEPARATOR.'bewil19'.DIRECTORY_SEPARATOR.'sitetemplate', '', $sourceFolder);
 
         if (str_replace($projectFolder, '', $sourceFolder) === 'vendor'.DIRECTORY_SEPARATOR.'bewil19'.DIRECTORY_SEPARATOR.'sitetemplate') {
-            // do new project code
-            // var_dump($projectFolder);
-
             $files = self::getDirContents($sourceFolder.DIRECTORY_SEPARATOR.'example');
 
             foreach ($files as $file) {
                 $fileName = str_replace($sourceFolder.DIRECTORY_SEPARATOR.'example'.DIRECTORY_SEPARATOR, '', $file);
                 if (false === file_exists($projectFolder.$fileName)) {
                     $fileContents = file_get_contents($file);
-                    // var_dump($projectFolder . $fileName);
                     self::fileForceContents($projectFolder.$fileName, $fileContents);
 
                     unset($fileContents);
@@ -28,7 +24,29 @@ class InstallProject
                 unset($fileName, $file);
             }
 
-            echo 'Project Created!';
+            unset($files);
+
+            $files = [
+                $sourceFolder.DIRECTORY_SEPARATOR.'.gitignore',
+                $sourceFolder.DIRECTORY_SEPARATOR.'.php-cs-fixer.dist.php',
+                $sourceFolder.DIRECTORY_SEPARATOR.'phpstan.neon.dist',
+            ];
+
+            foreach ($files as $file) {
+                $fileName = str_replace($sourceFolder.DIRECTORY_SEPARATOR, '', $file);
+                if (false === file_exists($projectFolder.$fileName)) {
+                    $fileContents = file_get_contents($file);
+                    self::fileForceContents($projectFolder.$fileName, $fileContents);
+
+                    unset($fileContents);
+                }
+
+                unset($fileName, $file);
+            }
+
+            unset($files);
+
+            echo 'Project Created or Updated from Example!';
         } else {
             echo 'Project can not be created from here!';
         }
