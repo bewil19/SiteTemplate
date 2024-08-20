@@ -14,7 +14,9 @@
         "friendsofphp/php-cs-fixer": "*"
     },
     "scripts": {
-        "cs": ["./vendor/bin/php-cs-fixer fix"],
-        "post-package-install": [ "bewil19\\Site\\InstallProject::postPackageInstall" ]
-    }
+        "cs": ["./vendor/bin/php-cs-fixer fix"]
+    },
+    "bin": [
+        "bin/sitetemplate"
+    ]
 }
