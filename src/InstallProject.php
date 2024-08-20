@@ -12,8 +12,26 @@ class InstallProject{
             // do new project code
             var_dump($sourceFolder);
             var_dump($projectFolder);
+
+            var_dump($sourceFolder . DIRECTORY_SEPARATOR . "example");
         } else {
             echo "No";
         }
+    }
+
+    function getDirContents($dir, &$results = array()) {
+        $files = scandir($dir);
+    
+        foreach ($files as $key => $value) {
+            $path = realpath($dir . DIRECTORY_SEPARATOR . $value);
+            if (!is_dir($path)) {
+                $results[] = $path;
+            } else if ($value != "." && $value != "..") {
+                $this->getDirContents($path, $results);
+                $results[] = $path;
+            }
+        }
+    
+        return $results;
     }
 }
