@@ -28,10 +28,21 @@ class InstallProject{
                 $results[] = $path;
             } else if ($value != "." && $value != "..") {
                 self::getDirContents($path, $results);
-                $results[] = $path;
+                //$results[] = $path;
             }
         }
     
         return $results;
+    }
+
+    public static function fileForceContents($fullPath, $contents, $flags =0){
+        $parts = explode( '/', $fullPath );
+        array_pop( $parts );
+        $dir = implode( '/', $parts );
+        
+        if( !is_dir( $dir ) )
+            mkdir( $dir, 0777, true );
+        
+        file_put_contents( $fullPath, $contents, $flags );
     }
 }
