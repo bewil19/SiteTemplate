@@ -6,6 +6,7 @@ declare (strict_types=1);
 use bewil19\Site\InstallProject;
 
 $possibleFiles = [
+    __DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "autoload.php",
     __DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "autoload.php",
     __DIR__.DIRECTORY_SEPARATOR.'..' . DIRECTORY_SEPARATOR . 'autoload.php'
 ];
