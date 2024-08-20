@@ -18,7 +18,8 @@ class InstallProject{
                 $fileName = str_replace($sourceFolder . DIRECTORY_SEPARATOR . "example" . DIRECTORY_SEPARATOR, "", $file);
                 if(file_exists($projectFolder . $fileName) === false){
                     $fileContents = file_get_contents($file);
-                    self::fileForceContents($projectFolder . $fileName, $fileContents);
+                    var_dump($projectFolder . $fileName);
+                    //self::fileForceContents($projectFolder . $fileName, $fileContents);
 
                     unset($fileContents);
                 }
