@@ -30,6 +30,7 @@ class InstallProject
                 $sourceFolder.DIRECTORY_SEPARATOR.'.gitignore',
                 $sourceFolder.DIRECTORY_SEPARATOR.'.php-cs-fixer.dist.php',
                 $sourceFolder.DIRECTORY_SEPARATOR.'phpstan.neon.dist',
+                $sourceFolder.DIRECTORY_SEPARATOR.'.github'.DIRECTORY_SEPARATOR.'dependabot.yml'
             ];
 
             foreach ($files as $file) {
