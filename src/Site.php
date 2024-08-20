@@ -24,9 +24,9 @@ class Site
 
     private function __construct(string $rootDir)
     {
-        $this->rootDir = $rootDir . DIRECTORY_SEPARATOR;
-        $this->templateDir = $this->rootDir . 'template' . DIRECTORY_SEPARATOR;
-        $this->pageDir = $this->rootDir . 'pages' . DIRECTORY_SEPARATOR;
+        $this->rootDir = $rootDir.DIRECTORY_SEPARATOR;
+        $this->templateDir = $this->rootDir.'template'.DIRECTORY_SEPARATOR;
+        $this->pageDir = $this->rootDir.'pages'.DIRECTORY_SEPARATOR;
 
         if (false == file_exists($this->pageDir)) {
             mkdir($this->pageDir);
@@ -35,7 +35,7 @@ class Site
         $http = isset($_SERVER['HTTPS']) && 'off' != $_SERVER['HTTPS'] ? 'https' : 'http';
         $httpHost = $_SERVER['HTTP_HOST'] ?? '';
         $serverName = $_SERVER['SERVER_NAME'] ?? '';
-        $this->siteUrl = $http . '://';
+        $this->siteUrl = $http.'://';
         if (!empty($httpHost)) {
             $this->siteUrl .= $httpHost;
         } elseif (!empty($serverName)) {
@@ -66,7 +66,7 @@ class Site
     public function redirect(string $page, int $code = 301): never
     {
         http_response_code($code);
-        header('Location: ' . $this->siteUrl . $this->subDir . $page);
+        header('Location: '.$this->siteUrl.$this->subDir.$page);
         echo '';
 
         exit;
@@ -82,14 +82,14 @@ class Site
         $config = Config::getInstance();
 
         if (false === $config->checkConfig() && 'install' !== $this->name) {
-            //$this->redirect('install', 302);
+            // $this->redirect('install', 302);
         }
 
         $template = new Engine($this->pageDir);
-        $template->loadExtension(new Asset($this->templateDir . 'assets'));
+        $template->loadExtension(new Asset($this->templateDir.'assets'));
 
-        if (!file_exists($this->pageDir . $this->name . '.php')) {
-            $template->setDirectory(__DIR__ . DIRECTORY_SEPARATOR . 'pages' . DIRECTORY_SEPARATOR);
+        if (!file_exists($this->pageDir.$this->name.'.php')) {
+            $template->setDirectory(__DIR__.DIRECTORY_SEPARATOR.'pages'.DIRECTORY_SEPARATOR);
         }
 
         $siteName = $config->getSetting('siteName');
@@ -99,15 +99,15 @@ class Site
 
         $template->addData([
             'siteName' => $siteName,
-            'canonicalLink' => $this->siteUrl . $this->subDir . $this->name,
-            'siteUrl' => $this->siteUrl . $this->subDir
+            'canonicalLink' => $this->siteUrl.$this->subDir.$this->name,
+            'siteUrl' => $this->siteUrl.$this->subDir,
         ]);
 
         try {
             echo $template->render($this->name);
         } catch (TemplateNotFound) {
             http_response_code(404);
-            if (file_exists($this->pageDir . 'errorpage.php')) {
+            if (file_exists($this->pageDir.'errorpage.php')) {
                 $template->addData([
                     'errorHeader' => 'Page not found!',
                     'errorText' => '<p>This page has not been found!<br>Please try again later!</p>',

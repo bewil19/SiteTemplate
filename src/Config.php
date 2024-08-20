@@ -56,7 +56,7 @@ class Config
      */
     public function install(array $post): string
     {
-        if(password_verify($post['installPassword'], $this->installPassword) === false){
+        if (false === password_verify($post['installPassword'], $this->installPassword)) {
             return 'Error: Invalid install password!';
         }
         if (isset($post[DatabaseType::autoConnect]) && 'on' === $post[DatabaseType::autoConnect]) {
