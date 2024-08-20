@@ -14,6 +14,7 @@
         "friendsofphp/php-cs-fixer": "*"
     },
     "scripts": {
-        "cs": ["./vendor/bin/php-cs-fixer fix"]
+        "cs": ["./vendor/bin/php-cs-fixer fix"],
+        "post-create-project-cmd": [ "bewil19\\Site\\InstallProject::postCreateProject" ]
     }
 }
