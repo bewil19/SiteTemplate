@@ -4,7 +4,7 @@ namespace bewil19\Site;
 
 class InstallProject
 {
-    public static function postCreateProject()
+    public static function postPackageInstall()
     {
         $sourceFolder = dirname(__DIR__);
         $projectFolder = str_replace('vendor'.DIRECTORY_SEPARATOR.'bewil19'.DIRECTORY_SEPARATOR.'sitetemplate', '', $sourceFolder);

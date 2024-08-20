@@ -15,6 +15,6 @@
     },
     "scripts": {
         "cs": ["./vendor/bin/php-cs-fixer fix"],
-        "post-create-project-cmd": [ "bewil19\\Site\\InstallProject::postCreateProject" ]
+        "post-package-install": [ "bewil19\\Site\\InstallProject::postPackageInstall" ]
     }
 }
