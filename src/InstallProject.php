@@ -10,7 +10,7 @@ class InstallProject{
         
         if(str_replace($projectFolder, "", $sourceFolder) === "vendor" . DIRECTORY_SEPARATOR . "bewil19" . DIRECTORY_SEPARATOR . "sitetemplate"){
             // do new project code
-            var_dump($projectFolder);
+            //var_dump($projectFolder);
 
             $files = self::getDirContents($sourceFolder . DIRECTORY_SEPARATOR . "example");
 
@@ -18,8 +18,8 @@ class InstallProject{
                 $fileName = str_replace($sourceFolder . DIRECTORY_SEPARATOR . "example" . DIRECTORY_SEPARATOR, "", $file);
                 if(file_exists($projectFolder . $fileName) === false){
                     $fileContents = file_get_contents($file);
-                    var_dump($projectFolder . $fileName);
-                    //self::fileForceContents($projectFolder . $fileName, $fileContents);
+                    //var_dump($projectFolder . $fileName);
+                    self::fileForceContents($projectFolder . $fileName, $fileContents);
 
                     unset($fileContents);
                 }
@@ -50,9 +50,9 @@ class InstallProject{
     }
 
     public static function fileForceContents($fullPath, $contents, $flags =0){
-        $parts = explode( '/', $fullPath );
+        $parts = explode(DIRECTORY_SEPARATOR, $fullPath );
         array_pop( $parts );
-        $dir = implode( '/', $parts );
+        $dir = implode(DIRECTORY_SEPARATOR, $parts );
         
         if( !is_dir( $dir ) )
             mkdir( $dir, 0777, true );
