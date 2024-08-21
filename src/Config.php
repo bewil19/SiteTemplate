@@ -103,7 +103,7 @@ class Config
             return 'Error: Unable to make settings table!';
         }
 
-        if (false === $database->tableExist('users') && false === $database->tableCreate('settings', [
+        if (false === $database->tableExist('users') && false === $database->tableCreate('users', [
             [
                 DatabaseType::tableName => 'id',
                 DatabaseType::tableType => DatabaseType::int,
