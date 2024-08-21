@@ -108,7 +108,6 @@ class User
     {
         $microtime = microtime();
         list($usec, $sec) = explode(' ', $microtime);
-        // list($zero, $usec) = explode(" ", $usec);
         $usec = str_pad($usec, 9, 0, STR_PAD_RIGHT);
         $usec = substr($usec, 0, 9);
 
@@ -128,4 +127,107 @@ class User
 
         return $time + $offset;
     }
+
+    public function registerAjax($post){
+        if(isset($post["agree"])){
+            $agree = true;
+        } else {
+            $agree = false;
+        }
+
+        $register = $this->register($post["username"], $post["password"], $post["confirmpassword"], $post["email"], $agree);
+
+        echo json_encode(array("msg" => $register));
+
+        return true;
+    }
+
+    private function isValidEmail($email){
+        return filter_var($email, FILTER_VALIDATE_EMAIL);
+    }
+
+    public function getUser($username = null, $email = null){
+        if(is_null($username) == false){
+            $user = $username;
+            $sql = "SELECT * FROM `users` WHERE `username` = :user;";
+        } elseif(is_null($email) == false){
+            $user = $email;
+            $sql = "SELECT * FROM `users` WHERE `email` = :user;";
+        }
+
+        $sqlOptions = [':user' => $user];
+
+        $database = Database::getInstance();
+
+        if($database->query($sql, $sqlOptions) === false){
+            return false;
+        }
+
+        $result = $database->StatmentGet();
+        if($result->rowCount() == 0){
+            return false;
+        }
+
+        return $result->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    public function register($username, $password, $confirmpassword, $email, $agree = true){
+        $errors = array();
+
+        if(empty($username) || empty($password) || empty($confirmpassword) || empty($email)){
+            $errors[] = "Make sure you fill all boxed in!";
+        } else {
+            if($this->isValidEmail($email) === false){
+                $errors[] = "Invalid email address!";
+            }
+            if($password <> $confirmpassword){
+                $errors[] = "Passwords do not match!";
+            }
+            if($agree === false){
+                $errors[] = "Must agree to terms and conditions!";
+            }
+
+        }
+
+        if(count($errors) > 0){
+            return $errors;
+        }
+
+        $errors = array();
+
+        $user = $this->getUser(username: $username);
+        $user2 = $this->getUser(email: $email);
+
+        if(is_array($user)){
+            $errors[] = "Username already in use!";
+        }
+        if(is_array($user2)){
+            $errors[] = "Email address already in use!";
+        }
+
+        if(count($errors) > 0){
+            return $errors;
+        }
+
+        $errors = array();
+
+        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+        $verifyHash = $this->randomString("md5");
+
+        $database = Database::getInstance();
+        $sql = "INSERT INTO `users` (`username`, `email`, `password`, `hash`) VALUES (:username, :email, :passwordHash, :verifyhash);";
+        $sqlOptions = [
+            ':username' => $username,
+            ':email' => $email,
+            ':password' => $passwordHash,
+            ':verifyhash' => $verifyHash
+        ];
+
+        $database = Database::getInstance();
+        if($database->query($sql, $sqlOptions) === false){
+            return array("Unable to create account, contact site admin!");
+        }
+
+        return array("Created account, you can now login!");
+    } 
 }

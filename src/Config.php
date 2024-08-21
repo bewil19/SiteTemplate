@@ -100,7 +100,43 @@ class Config
             ],
             DatabaseType::primaryKey => 'id',
         ])) {
-            return 'Error: Unable to make tables!';
+            return 'Error: Unable to make settings table!';
+        }
+
+        if (false === $database->tableExist('users') && false === $database->tableCreate('settings', [
+            [
+                DatabaseType::tableName => 'id',
+                DatabaseType::tableType => DatabaseType::int,
+                DatabaseType::default => DatabaseType::notNull,
+                DatabaseType::autoIntName => DatabaseType::autoInt,
+            ],
+            [
+                DatabaseType::tableName => 'username',
+                DatabaseType::tableType => DatabaseType::varchar,
+                DatabaseType::tableLength => '255',
+                DatabaseType::default => DatabaseType::notNull,
+            ],
+            [
+                DatabaseType::tableName => 'email',
+                DatabaseType::tableType => DatabaseType::varchar,
+                DatabaseType::tableLength => '255',
+                DatabaseType::default => DatabaseType::notNull,
+            ],
+            [
+                DatabaseType::tableName => 'password',
+                DatabaseType::tableType => DatabaseType::varchar,
+                DatabaseType::tableLength => '255',
+                DatabaseType::default => DatabaseType::notNull,
+            ],
+            [
+                DatabaseType::tableName => 'hash',
+                DatabaseType::tableType => DatabaseType::varchar,
+                DatabaseType::tableLength => '255',
+                DatabaseType::default => DatabaseType::notNull,
+            ],
+            DatabaseType::primaryKey => 'id',
+        ])) {
+            return 'Error: Unable to make users table!';
         }
 
         return 'Success: Config saved! Site ready to use!';
