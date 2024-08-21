@@ -219,7 +219,7 @@ class User
         $sqlOptions = [
             ':username' => $username,
             ':email' => $email,
-            ':password' => $passwordHash,
+            ':passwordHash' => $passwordHash,
             ':verifyhash' => $verifyHash
         ];
 
