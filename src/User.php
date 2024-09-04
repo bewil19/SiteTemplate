@@ -135,11 +135,7 @@ class User
             $agree = false;
         }
 
-        $register = $this->register($post["username"], $post["password"], $post["confirmpassword"], $post["email"], $agree);
-
-        echo json_encode(array("msg" => $register));
-
-        return true;
+        return $this->register($post["username"], $post["password"], $post["confirmpassword"], $post["email"], $agree);
     }
 
     private function isValidEmail($email){
