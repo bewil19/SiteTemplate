@@ -75,8 +75,8 @@ class Config
             return 'Error: Not able to save config!';
         }
 
-        if (false === $database->databaseExist($post[DatabaseType::dbName]) && false === $database->databaseCreate($post[DatabaseType::dbName])) {
-            return "Error: Database don't exist and unable to make!";
+        if (false === $database->databaseExist($post[DatabaseType::dbName])) {
+            return "Error: Database don't exist, please make the database and try again!";
         }
 
         if (false === $database->tableExist('settings') && false === $database->tableCreate('settings', [
@@ -137,6 +137,47 @@ class Config
             DatabaseType::primaryKey => 'id',
         ])) {
             return 'Error: Unable to make users table!';
+        }
+
+        if (false === $database->tableExist('loginHistory') && false === $database->tableCreate('loginHistory', [
+            [
+                DatabaseType::tableName => 'id',
+                DatabaseType::tableType => DatabaseType::int,
+                DatabaseType::default => DatabaseType::notNull,
+                DatabaseType::autoIntName => DatabaseType::autoInt,
+            ],
+            [
+                DatabaseType::tableName => 'userID',
+                DatabaseType::tableType => DatabaseType::varchar,
+                DatabaseType::tableLength => '255',
+                DatabaseType::default => DatabaseType::notNull,
+            ],
+            [
+                DatabaseType::tableName => 'hash',
+                DatabaseType::tableType => DatabaseType::varchar,
+                DatabaseType::tableLength => '255',
+                DatabaseType::default => DatabaseType::notNull,
+            ],
+            [
+                DatabaseType::tableName => 'ip',
+                DatabaseType::tableType => DatabaseType::varchar,
+                DatabaseType::tableLength => '255',
+                DatabaseType::default => DatabaseType::notNull,
+            ],
+            [
+                DatabaseType::tableName => 'time',
+                DatabaseType::tableType => DatabaseType::varchar,
+                DatabaseType::tableLength => '255',
+                DatabaseType::default => DatabaseType::notNull,
+            ],
+            [
+                DatabaseType::tableName => 'success',
+                DatabaseType::tableType => DatabaseType::int,
+                DatabaseType::default => DatabaseType::notNull,
+            ],
+            DatabaseType::primaryKey => 'id',
+        ])) {
+            return 'Error: Unable to make loginHistory table!';
         }
 
         return 'Success: Config saved! Site ready to use!';

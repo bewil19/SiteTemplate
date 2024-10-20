@@ -138,8 +138,120 @@ class User
         return $this->register($post["username"], $post["password"], $post["confirmpassword"], $post["email"], $agree);
     }
 
+    public function loginAjax($post){
+        if(isset($post["rememberme"])){
+            $rememberme = true;
+        } else {
+            $rememberme = false;
+        }
+
+        return $this->login($post["username"], $post["password"], $rememberme);
+    }
+
     private function isValidEmail($email){
         return filter_var($email, FILTER_VALIDATE_EMAIL);
+    }
+
+    private function ip(){
+        if(!empty($_SERVER["HTTP_CF_CONNECTING_IP"])){
+            return $_SERVER["HTTP_CF_CONNECTING_IP"];
+        } else if(!empty($_SERVER["REMOTE_ADDR"])){
+            return $_SERVER["REMOTE_ADDR"];
+        } else {
+            return "0.0.0.0";
+        }
+    }
+
+    private function bruteCheck($userID){
+        $timeBrute = time()-(60*5);
+
+        $database = Database::getInstance();
+        $sql = "SELECT * FROM `loginHistory` WHERE `userID`='{$userID}' AND `time` > '$timeBrute' AND `success`='0'";
+
+
+        if($database->query($sql) === false){
+            return false;
+        }
+
+        $result = $database->StatmentGet();
+        if($result->rowCount() > 2){
+            return true;
+        }
+        
+        return false;
+    }
+
+    public function login($usernameOrEmail, $password, $rememberme){
+        $errors = array();
+
+        if(empty($usernameOrEmail) || empty($password)){
+            return array("Make sure you fill all boxed in!");
+        }
+        
+        if($this->isValidEmail($usernameOrEmail) === true){
+            $user = $this->getUser(email: $usernameOrEmail);
+        } else {
+            $user = $this->getUser(username: $usernameOrEmail);
+        }
+
+        if(is_array($user)){
+            $database = Database::getInstance();
+
+            if(password_verify($password, $user["password"])){
+
+                if($this->bruteCheck($user["id"])){
+                    return array("Your account has been locked out", "Please try to login again later!");
+                }
+
+                $this->writeCookie("userID", $user["id"], $rememberme);
+                $verifyHash = $this->randomString("md5");
+                
+                $sql = "INSERT INTO `loginHistory` (`userID`, `hash`, `ip`, `time`, `success`) VALUES (:username, :verifyhash, :ip, :vtime, :success);";
+                $sqlOptions = [
+                    ':username' => $user["id"],
+                    ':ip' => $this->ip(),
+                    ':vtime' => time(),
+                    ':verifyhash' => $verifyHash,
+                    ':success' => '1'
+                ];
+                
+                $database->query($sql, $sqlOptions);
+
+                $this->writeCookie("userHash", $verifyHash, $rememberme);
+                
+                return array("Logged in!");
+            } else {
+                $sql = "INSERT INTO `loginHistory` (`userID`, `ip`, `time`, `success`) VALUES (:username, :ip, :vtime, :success);";
+                $sqlOptions = [
+                    ':username' => $user["id"],
+                    ':ip' => $this->ip(),
+                    ':vtime' => time(),
+                    ':success' => '0'
+                ];
+                
+                $database->query($sql, $sqlOptions);
+            }
+        }
+
+        if(count($errors) > 0){
+            return $errors;
+        }
+
+        return array("You have entered the wrong login details!");
+    }
+
+    private function writeCookie($name, $value, $remember = false){
+        $secure = isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] === "on" ? true : false;
+        if($remember){
+            setcookie($name, $value, time()+(60*60*24*30), "/", $_SERVER["HTTP_HOST"], $secure);
+        } else {
+            setcookie($name, $value, 0, "/", $_SERVER["HTTP_HOST"], $secure);
+        }
+    }
+
+    private function unsetCookie($name){
+        $secure = isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] === "on" ? true : false;
+        setcookie($name, "", time()-(60*60*24*30), "/", $_SERVER["HTTP_HOST"], $secure);
     }
 
     public function getUser($username = null, $email = null){
