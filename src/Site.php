@@ -24,6 +24,7 @@ class Site
 
     private function __construct(string $rootDir)
     {
+        clearstatcache(true);
         $this->rootDir = $rootDir.DIRECTORY_SEPARATOR;
         $this->templateDir = $this->rootDir.'template'.DIRECTORY_SEPARATOR;
         $this->pageDir = $this->rootDir.'pages'.DIRECTORY_SEPARATOR;
