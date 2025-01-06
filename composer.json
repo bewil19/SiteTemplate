@@ -10,7 +10,7 @@
         }
     },
     "require-dev": {
-        "rector/rector": "^1.2",
+        "rector/rector": "^2.0",
         "friendsofphp/php-cs-fixer": "*"
     },
     "scripts": {
