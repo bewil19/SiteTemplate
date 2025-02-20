@@ -1,5 +1,7 @@
 {
     "name": "bewil19/sitetemplate",
+    "description": "My sitetemplate for all my sites.",
+    "license": "MIT",
     "require": {
         "php": "^8.0",
         "league/plates": "^3.5"
