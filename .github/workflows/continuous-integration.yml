@@ -31,6 +31,10 @@ jobs:
                 key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
             - name: Install dependencies
               run: composer install --prefer-dist --no-progress --no-dev
+            - uses: actions/upload-artifact@v4
+              with:
+                name: build
+                path: .
     dependabot:
         name: Dependabot
         needs: [test, build]
