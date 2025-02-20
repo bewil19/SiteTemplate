@@ -99,6 +99,8 @@ class Site
                 $template->setDirectory($this->pageDir.$this->name.DIRECTORY_SEPARATOR);
                 $this->name = $_GET['page2'];
             }
+        } else {
+            $template->addFolder('shared', $this->templateDir);
         }
 
         $siteName = $config->getSetting('siteName');
