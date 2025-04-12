@@ -1,3 +1,4 @@
 vendor/
 config.json
 .php-cs-fixer.cache
+*secrets*
