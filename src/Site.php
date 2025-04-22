@@ -122,4 +122,9 @@ class Site
             }
         }
     }
+
+    public function getSiteUrl(): string
+    {
+        return $this->siteUrl.$this->subDir;
+    }
 }
