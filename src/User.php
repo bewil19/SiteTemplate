@@ -2,11 +2,13 @@
 
 namespace bewil19\Site;
 
+use bewil19\Site\Traits\SingletonTrait;
+
 class User
 {
-    public const GREGORIAN_OFFSET = 0x01B21DD213814000;
+    use SingletonTrait;
 
-    private static $instance;
+    public const GREGORIAN_OFFSET = 0x01B21DD213814000;
 
     private $uuid;
     private $lastTime;
@@ -14,15 +16,6 @@ class User
     private function __construct()
     {
         $this->uuid = $this->newUuid(self::randomString('nozero', 15));
-    }
-
-    public static function getInstance(): User
-    {
-        if (!self::$instance instanceof User) {
-            self::$instance = new User();
-        }
-
-        return self::$instance;
     }
 
     public static function randomString($type = 'alnum', $len = 10)

@@ -2,41 +2,41 @@
 
 namespace bewil19\Site;
 
-enum DatabaseType
+enum DatabaseType: string
 {
-    public const dbType = 'dbType';
+    case dbType = 'dbType';
 
-    public const dbUsername = 'dbUsername';
+    case dbUsername = 'dbUsername';
 
-    public const dbPassword = 'dbPassword';
+    case dbPassword = 'dbPassword';
 
-    public const dbHost = 'dbHost';
+    case dbHost = 'dbHost';
 
-    public const dbPort = 'dbPort';
+    case dbPort = 'dbPort';
 
-    public const autoConnect = 'autoConnect';
+    case autoConnect = 'autoConnect';
 
-    public const dbName = 'dbName';
+    case dbName = 'dbName';
 
-    public const mysql = 'MySQL';
+    case mysql = 'MySQL';
 
-    public const autoInt = 'AUTO_INCREMENT';
+    case autoInt = 'AUTO_INCREMENT';
 
-    public const int = 'int';
+    case int = 'int';
 
-    public const notNull = 'NOT NULL';
+    case notNull = 'NOT NULL';
 
-    public const varchar = 'varchar(%int%)';
+    case varchar = 'varchar(%int%)';
 
-    public const primaryKey = 'PRIMARY KEY (`%name%`)';
+    case primaryKey = 'PRIMARY KEY (`%name%`)';
 
-    public const tableType = 'type';
+    case tableType = 'type';
 
-    public const tableLength = 'length';
+    case tableLength = 'length';
 
-    public const tableName = 'name';
+    case tableName = 'name';
 
-    public const default = 'default';
+    case default = 'default';
 
-    public const autoIntName = 'autoInt';
+    case autoIntName = 'autoInt';
 }

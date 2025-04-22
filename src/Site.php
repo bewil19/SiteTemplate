@@ -2,13 +2,14 @@
 
 namespace bewil19\Site;
 
+use bewil19\Site\Traits\SingletonTrait;
 use League\Plates\Engine;
 use League\Plates\Exception\TemplateNotFound;
 use League\Plates\Extension\Asset;
 
 class Site
 {
-    private static ?Site $instance = null;
+    use SingletonTrait;
 
     private string $rootDir;
 
@@ -48,15 +49,6 @@ class Site
         $root = str_replace('\\', '/', $this->rootDir);
         $subDir = str_replace($docRoot, '', $root);
         $this->subDir = $subDir;
-    }
-
-    public static function getInstance(string $rootDir): Site
-    {
-        if (!self::$instance instanceof Site) {
-            self::$instance = new Site($rootDir);
-        }
-
-        return self::$instance;
     }
 
     public function getRootDir(): string

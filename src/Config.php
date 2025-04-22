@@ -2,45 +2,37 @@
 
 namespace bewil19\Site;
 
+use bewil19\Site\Traits\SingletonTrait;
+
 class Config
 {
-    private static ?Config $instance = null;
-
+    use SingletonTrait;
     /**
      * @var array<string>
      */
     private array $config = [
-        DatabaseType::dbType => DatabaseType::mysql,
-        DatabaseType::dbUsername => 'root',
-        DatabaseType::dbPassword => '',
-        DatabaseType::dbHost => 'localhost',
-        DatabaseType::dbPort => '3306',
-        DatabaseType::autoConnect => 'false',
-        DatabaseType::dbName => 'databaseName',
+        DatabaseType::dbType->value => DatabaseType::mysql->value,
+        DatabaseType::dbUsername->value => 'root',
+        DatabaseType::dbPassword->value => '',
+        DatabaseType::dbHost->value => 'localhost',
+        DatabaseType::dbPort->value => '3306',
+        DatabaseType::autoConnect->value => 'false',
+        DatabaseType::dbName->value => 'databaseName',
     ];
 
     private string $installPassword = '$2y$10$OJ/67WlrXQS/GAZjhQgXm.CKxeBf6y5kJUI1LwwIYwrzNoF6559Te';
 
-    private function __construct(private string $rootDir)
+    private function __construct()
     {
+
         if ($this->checkConfig()) {
             $this->loadConfig();
         }
     }
 
-    public static function getInstance(): Config
-    {
-        if (!self::$instance instanceof Config) {
-            $rootDir = Site::getInstance('')->getRootDir();
-            self::$instance = new Config($rootDir);
-        }
-
-        return self::$instance;
-    }
-
     public function checkConfig(): bool
     {
-        return file_exists($this->rootDir.'config.json');
+        return file_exists(Site::getInstance()->getRootDir().'config.json');
     }
 
     /**
@@ -211,7 +203,7 @@ class Config
 
     private function loadConfig(): bool
     {
-        $config = file_get_contents($this->rootDir.'config.json');
+        $config = file_get_contents(Site::getInstance()->getRootDir().'config.json');
         if (is_bool($config)) {
             return $config;
         }
@@ -231,7 +223,7 @@ class Config
      */
     private function saveConfig(array $config): bool
     {
-        $save = file_put_contents($this->rootDir.'config.json', json_encode($config));
+        $save = file_put_contents(Site::getInstance()->getRootDir().'config.json', json_encode($config));
 
         return is_int($save);
     }

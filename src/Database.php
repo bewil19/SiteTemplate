@@ -2,9 +2,11 @@
 
 namespace bewil19\Site;
 
+use bewil19\Site\Traits\SingletonTrait;
+
 class Database
 {
-    private static ?Database $instance = null;
+    use SingletonTrait;
 
     private string $error;
 
@@ -18,7 +20,7 @@ class Database
 
     private \PDOStatement $statment;
 
-    public function __construct()
+    private function __construct()
     {
         unset($this->database, $this->statment);
     }
@@ -26,15 +28,6 @@ class Database
     public function __destruct()
     {
         unset($this->database);
-    }
-
-    public static function getInstance(): Database
-    {
-        if (!self::$instance instanceof Database) {
-            self::$instance = new Database();
-        }
-
-        return self::$instance;
     }
 
     /**
@@ -334,8 +327,8 @@ class Database
         $this->errorEmpty();
         $connect = false;
 
-        switch ($config[DatabaseType::dbType]) {
-            case DatabaseType::mysql:
+        switch ($config[DatabaseType::dbType->value]) {
+            case DatabaseType::mysql->value:
                 $connect = $this->connectMysql($config);
 
                 break;
@@ -349,8 +342,8 @@ class Database
         if ($connect) {
             $this->database->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             $this->database->setAttribute(\PDO::ATTR_AUTOCOMMIT, true);
-            $this->databaseType = $config[DatabaseType::dbType];
-            $this->databaseSet($config[DatabaseType::dbName]);
+            $this->databaseType = $config[DatabaseType::dbType->value];
+            $this->databaseSet($config[DatabaseType::dbName->value]);
         }
 
         return $connect;
@@ -364,7 +357,7 @@ class Database
         $this->errorEmpty();
 
         try {
-            $this->database = new \PDO('mysql:host'.$config[DatabaseType::dbHost].';port='.$config[DatabaseType::dbPort], $config[DatabaseType::dbUsername], $config[DatabaseType::dbPassword]);
+            $this->database = new \PDO('mysql:host'.$config[DatabaseType::dbHost->value].';port='.$config[DatabaseType::dbPort->value], $config[DatabaseType::dbUsername->value], $config[DatabaseType::dbPassword->value]);
         } catch (\PDOException $pdoException) {
             $this->error = $pdoException->getMessage();
 
