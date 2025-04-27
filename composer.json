@@ -4,7 +4,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.0",
-        "league/plates": "^3.5"
+        "league/plates": "*"
     },
     "autoload": {
         "psr-4": {

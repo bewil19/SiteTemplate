@@ -7,6 +7,7 @@ use bewil19\Site\Traits\SingletonTrait;
 class Config
 {
     use SingletonTrait;
+
     /**
      * @var array<string>
      */
@@ -24,7 +25,6 @@ class Config
 
     private function __construct()
     {
-
         if ($this->checkConfig()) {
             $this->loadConfig();
         }

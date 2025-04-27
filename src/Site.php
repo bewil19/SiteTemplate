@@ -56,7 +56,7 @@ class Site
         return $this->rootDir;
     }
 
-    public function redirect(string $page, int $code = 301): never
+    public function redirect(string $page, int $code = 301)
     {
         http_response_code($code);
         header('Location: '.$this->siteUrl.$this->subDir.$page);
@@ -82,12 +82,11 @@ class Site
         $template->loadExtension(new Asset($this->rootDir));
 
         if (!file_exists($this->pageDir.$this->name.'.php')) {
-            
             $template->setDirectory(__DIR__.DIRECTORY_SEPARATOR.'pages'.DIRECTORY_SEPARATOR);
 
-            if(is_dir($this->pageDir.$this->name)
+            if (is_dir($this->pageDir.$this->name)
             && !empty($_GET['page2'])
-            && file_exists($this->pageDir.$this->name.DIRECTORY_SEPARATOR.$_GET['page2'].'.php')){
+            && file_exists($this->pageDir.$this->name.DIRECTORY_SEPARATOR.$_GET['page2'].'.php')) {
                 $template->setDirectory($this->pageDir.$this->name.DIRECTORY_SEPARATOR);
                 $this->name = $_GET['page2'];
             }

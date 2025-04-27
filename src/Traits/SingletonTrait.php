@@ -6,6 +6,11 @@ trait SingletonTrait
 {
     private static $instance;
 
+    // Prevent cloning and unserializing
+    private function __clone() {}
+
+    public function __wakeup() {}
+
     public static function getInstance(...$args)
     {
         if (!isset(self::$instance)) {
@@ -16,8 +21,4 @@ trait SingletonTrait
 
         return self::$instance;
     }
-
-    // Prevent cloning and unserializing
-    private function __clone() {}
-    public function __wakeup() {}
 }
