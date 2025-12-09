@@ -41,5 +41,3 @@ jobs:
         needs: [test, build]
         if: ${{ github.actor == 'dependabot[bot]' && github.event_name == 'pull_request'}}
         uses: bewil19/.github/.github/workflows/dependabot-pr.yml@main
-        secrets:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
