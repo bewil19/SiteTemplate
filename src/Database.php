@@ -243,23 +243,23 @@ class Database
                 $sql = sprintf('CREATE TABLE `%s` (', $tableName);
                 foreach ($tableOptions as $key => $val) {
                     if (is_array($val)) {
-                        $sql .= sprintf('`%s` ', $val[DatabaseType::tableName]);
+                        $sql .= sprintf('`%s` ', $val[DatabaseType::tableName->value]);
 
-                        switch ($val[DatabaseType::tableType]) {
-                            case DatabaseType::int:
-                                $sql .= DatabaseType::int.' ';
+                        switch ($val[DatabaseType::tableType->value]) {
+                            case DatabaseType::int->value:
+                                $sql .= DatabaseType::int->value.' ';
 
                                 break;
 
-                            case DatabaseType::varchar:
-                                $sql .= str_replace('%int%', $val[DatabaseType::tableLength], $val[DatabaseType::tableType]).' ';
+                            case DatabaseType::varchar->value:
+                                $sql .= str_replace('%int%', $val[DatabaseType::tableLength->value], $val[DatabaseType::tableType->value]).' ';
 
                                 break;
                         }
 
-                        $sql .= $val[DatabaseType::default];
-                        if (isset($val[DatabaseType::autoIntName])) {
-                            $sql .= ' '.$val[DatabaseType::autoIntName].', ';
+                        $sql .= $val[DatabaseType::default->value];
+                        if (isset($val[DatabaseType::autoIntName->value])) {
+                            $sql .= ' '.$val[DatabaseType::autoIntName->value].', ';
                         } else {
                             $sql .= ', ';
                         }

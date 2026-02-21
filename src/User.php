@@ -144,30 +144,13 @@ class User
                 $this->writeCookie('userID', $user['id'], $rememberme);
                 $verifyHash = $this->randomString('md5');
 
-                $sql = 'INSERT INTO `loginHistory` (`userID`, `hash`, `ip`, `time`, `success`) VALUES (:username, :verifyhash, :ip, :vtime, :success);';
-                $sqlOptions = [
-                    ':username' => $user['id'],
-                    ':ip' => $this->ip(),
-                    ':vtime' => time(),
-                    ':verifyhash' => $verifyHash,
-                    ':success' => '1',
-                ];
-
-                $database->query($sql, $sqlOptions);
+                $this->logLogin($user['id'], '1', $verifyHash);
 
                 $this->writeCookie('userHash', $verifyHash, $rememberme);
 
                 return ['Logged in!'];
             }
-            $sql = 'INSERT INTO `loginHistory` (`userID`, `ip`, `time`, `success`) VALUES (:username, :ip, :vtime, :success);';
-            $sqlOptions = [
-                ':username' => $user['id'],
-                ':ip' => $this->ip(),
-                ':vtime' => time(),
-                ':success' => '0',
-            ];
-
-            $database->query($sql, $sqlOptions);
+            $this->logLogin($user['id'], '0');
         }
 
         if (count($errors) > 0) {
@@ -175,6 +158,26 @@ class User
         }
 
         return ['You have entered the wrong login details!'];
+    }
+
+    private function logLogin($userId, $success, $hash = null)
+    {
+        $database = Database::getInstance();
+        $sqlOptions = [
+            ':username' => $userId,
+            ':ip' => $this->ip(),
+            ':vtime' => time(),
+            ':success' => $success,
+        ];
+
+        if ($hash) {
+            $sql = 'INSERT INTO `loginHistory` (`userID`, `hash`, `ip`, `time`, `success`) VALUES (:username, :verifyhash, :ip, :vtime, :success);';
+            $sqlOptions[':verifyhash'] = $hash;
+        } else {
+            $sql = 'INSERT INTO `loginHistory` (`userID`, `ip`, `time`, `success`) VALUES (:username, :ip, :vtime, :success);';
+        }
+
+        $database->query($sql, $sqlOptions);
     }
 
     public function getUser($username = null, $email = null)

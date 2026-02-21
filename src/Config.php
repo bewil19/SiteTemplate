@@ -71,7 +71,7 @@ class Config
             return "Error: Database don't exist, please make the database and try again!";
         }
 
-        if (false === $database->tableExist('settings') && false === $database->tableCreate('settings', [
+        if (false === $this->createTableSafe($database, 'settings', [
             [
                 DatabaseType::tableName => 'id',
                 DatabaseType::tableType => DatabaseType::int,
@@ -95,7 +95,7 @@ class Config
             return 'Error: Unable to make settings table!';
         }
 
-        if (false === $database->tableExist('users') && false === $database->tableCreate('users', [
+        if (false === $this->createTableSafe($database, 'users', [
             [
                 DatabaseType::tableName => 'id',
                 DatabaseType::tableType => DatabaseType::int,
@@ -131,7 +131,7 @@ class Config
             return 'Error: Unable to make users table!';
         }
 
-        if (false === $database->tableExist('loginHistory') && false === $database->tableCreate('loginHistory', [
+        if (false === $this->createTableSafe($database, 'loginHistory', [
             [
                 DatabaseType::tableName => 'id',
                 DatabaseType::tableType => DatabaseType::int,
@@ -173,6 +173,15 @@ class Config
         }
 
         return 'Success: Config saved! Site ready to use!';
+    }
+
+    private function createTableSafe(Database $database, string $tableName, array $columns): bool
+    {
+        if ($database->tableExist($tableName)) {
+            return true;
+        }
+
+        return $database->tableCreate($tableName, $columns);
     }
 
     public function getSetting(string $settingName): string
