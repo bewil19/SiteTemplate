@@ -32,7 +32,7 @@ jobs:
                 key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
             - name: Install dependencies
               run: composer install --prefer-dist --no-progress --no-dev
-            - uses: actions/upload-artifact@v4
+            - uses: actions/upload-artifact@v7
               with:
                 name: build
                 include-hidden-files: true
